@@ -3,7 +3,7 @@
 
 #include "config.h"
 
-int UltraSonicScan() {
+int UltraSonicScan() { // uses the hc-s04 sensor to scan for obstacles
     static float duration = 0.0;
     static int distanceCm = 0;
 
@@ -31,4 +31,3 @@ int lineScan(){
 #endif
 
 // https://projecthub.arduino.cc/lucasfernando/ultrasonic-sensor-with-arduino-complete-guide-284faf
-// https://docs.arduino.cc/built-in-examples/digital/BlinkWithoutDelay/

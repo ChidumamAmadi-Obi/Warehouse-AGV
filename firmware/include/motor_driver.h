@@ -10,7 +10,7 @@ typedef enum { // define direction codes for motor driver
     BACKWARD
 } dir;
 
-void L298Controller(dir direction, uint8_t speed){
+void L298Driver(dir direction, uint8_t speed){ // controls motor direction and speed
     if ( speed > 0 ) { // if given a speed...
         switch(direction) {
             case RIGHT: 
@@ -55,6 +55,5 @@ void L298Controller(dir direction, uint8_t speed){
         analogWrite(MOTOR_PIN_B2, 0);
     }
 }
-
 
 #endif

@@ -35,19 +35,19 @@ void setup() {
 }
 
 void loop() {
-  L298Controller(RIGHT,255); 
+  L298Driver(RIGHT,255); // testing motors
   Serial.println("RIGHT");
   delay(1000);
-  L298Controller(LEFT,255); 
+  L298Driver(LEFT,255); 
   Serial.println("LEFT");
   delay(1000);
-  L298Controller(FORWARD,255); 
+  L298Driver(FORWARD,255); 
   Serial.println("FORWARDS");
   delay(1000);
-  L298Controller(BACKWARD,255); 
+  L298Driver(BACKWARD,255); 
   Serial.println("BACKWARDS");
   delay(1000);
-  L298Controller(BACKWARD,0);
+  L298Driver(BACKWARD,0);
   Serial.println("OFF");
   delay(1000);
 }
