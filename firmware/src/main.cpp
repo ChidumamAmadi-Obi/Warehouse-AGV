@@ -1,6 +1,7 @@
-#include "config.h"
-#include "sensor_drivers.h"
-#include "motor_driver.h"
+// author: Chidumam Amadi-Obi
+// student number: B00167937
+
+#include "agv_controller.h"
 
 void initGPIO() {
   pinMode(TRIG_PIN, OUTPUT);
@@ -21,7 +22,7 @@ void initGPIO() {
   analogWrite(MOTOR_PIN_A1, 0);
   analogWrite(MOTOR_PIN_A2, 0);
   analogWrite(MOTOR_PIN_B1, 0);
-  analogWrite(MOTOR_PIN_B1, 0);
+  analogWrite(MOTOR_PIN_B2, 0);
 
   digitalWrite(LED_PIN, LOW);
   digitalWrite(BUZZER_PIN, LOW);
@@ -30,24 +31,15 @@ void initGPIO() {
 
 void setup() {
   Serial.begin(115200);
-  Serial.println("hola");
   initGPIO();
+  melodyManager(STARTUP_MELODY);
+  // esp_task_wdt_init(WDT_TIMEOUT, true); //enable panic so ESP32 restarts
+  // esp_task_wdt_add(NULL); //add current thread to WDT watch
+  Serial.println("AGV INITALIZED!");
 }
 
 void loop() {
-  L298Driver(RIGHT,255); // testing motors
-  Serial.println("RIGHT");
-  delay(1000);
-  L298Driver(LEFT,255); 
-  Serial.println("LEFT");
-  delay(1000);
-  L298Driver(FORWARD,255); 
-  Serial.println("FORWARDS");
-  delay(1000);
-  L298Driver(BACKWARD,255); 
-  Serial.println("BACKWARDS");
-  delay(1000);
-  L298Driver(BACKWARD,0);
-  Serial.println("OFF");
-  delay(1000);
+  AGVStateMachine();
 }
+
+
