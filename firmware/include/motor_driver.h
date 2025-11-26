@@ -3,7 +3,7 @@
 
 #include "config.h"
 
-void L298Driver(dir direction, SpeedModes speed){ // controls motor direction and speed
+void L298Driver(Dir direction, SpeedModes speed){ // controls motor direction and speed
     if ( speed != OFF ) { // if given a speed...
         switch(direction) {
             case FORWARD: 

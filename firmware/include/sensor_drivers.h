@@ -21,7 +21,7 @@ void lineScan(){ // uses ir sensors to keep tracck of where bot is on the line
     line.statusR = digitalRead(R_IR_PIN) ? true : false;                // variable = (condition) ? a : b
     line.statusL = digitalRead(L_IR_PIN) ? true : false;                // if condition is true, variable = a, if false variable = b
     line.cross = (line.statusL && line.statusR) ? true : false;    
-}
+} // tenery operators use less lines of code than if else statements
 
 #endif
 

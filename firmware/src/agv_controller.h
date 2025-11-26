@@ -14,7 +14,34 @@
 #include "motor_driver.h"
 #include "sensor_drivers.h"
 
-void alertOnce(melodies melody) { // only alerts user with melody once per state
+unsigned long lastDestinationIncriment = 0.0;
+
+void trackLocation(){ // tracks location of agv 
+    if (line.cross && (millis() - lastDestinationIncriment > 500)) { // if docking station is reached...
+        agvStatus.agvLocation++;
+        lastDestinationIncriment = millis();
+    }
+}
+
+void getUserInput(){ // gets user input from ps4 controller ( using serial.parseInt() for simulation and testing )
+    int userInputDestination = Serial.parseInt();
+    if (Serial.available() == 0) userInputDestination = -1; // if user has not put anything... 
+
+    if ((userInputDestination != agvStatus.agvLocation) && (userInputDestination != -1)) {
+        agvStatus.agvDestination = userInputDestination;
+        agvStatus.hasDestination = true; 
+        Serial.print(agvStatus.agvDestination);
+        // Serial.println(" is your destination");
+
+    } else if (userInputDestination = -1) {
+        // Serial.println("input a destination...");
+        
+    } else if (userInputDestination == agvStatus.agvLocation) {
+        // Serial.println("AGV is already at location, try again");
+    }
+}
+
+void alertOnce(Melodies melody) { // only alerts user with melody once per state
     if (!agvStatus.hasBeenAlerted) {
         melodyManager(melody);
         agvStatus.hasBeenAlerted = true;
@@ -44,20 +71,24 @@ void AGVStateMachine(){
     switch(agvStatus.currentAGVState) {
         case STATUS_IDLE: // state 0 __________________________________________________________________________________________________
             LEDBlinker(1000, 250);
+            getUserInput(); // get user destination input
 
-            if(agvStatus.isCarryingLoad) { // will also check if destination has been input via blue tooth in the future
+            if(agvStatus.isCarryingLoad && agvStatus.hasDestination) { // will also check if destination has been input via blue tooth in the future
                 agvStatus.currentAGVState = STATUS_TRAVELLING; // if a load has been placed agv will start traveling
+                alertOnce(PACKAGE_RECEIVED_MELODY);
                 digitalWrite(LED_PIN,LOW); 
             }
             break;
 
         case STATUS_TRAVELLING: // state 1 ____________________________________________________________________________________________
             lineScan(); // check and update robots position on the line
-            alertOnce(PACKAGE_RECEIVED_MELODY);
+            trackLocation();
 
-            if (line.cross) {
+            
+            if (agvStatus.agvDestination == agvStatus.agvLocation) {
                 agvStatus.currentAGVState = STATUS_UNLOADING;  // if destination has been reached the agv will start unloading
                 agvStatus.hasBeenAlerted = false; // reset alert flag
+                // NOTE: should also move forward a bit past the cross
             }
             if (agvStatus.isPathObstructed) { // if object detected...
                 agvStatus.currentAGVState = STATUS_OBSTACLE_OBSTRUCTION; 
@@ -80,6 +111,8 @@ void AGVStateMachine(){
         case STATUS_UNLOADING: // state 3  _____________________________________________________________________________________________
             L298Driver(STOP,OFF);
             alertOnce(DESTINATION_REACHED_MELODY);
+            agvStatus.agvDestination = -1; // reset chosen destination 
+            agvStatus.hasDestination = false;
             if (!agvStatus.isCarryingLoad) agvStatus.currentAGVState = STATUS_IDLE; // if load is removed go back to your idle state
             break;
 
@@ -91,7 +124,29 @@ void AGVStateMachine(){
             agvStatus.currentAGVState = STATUS_ERROR;
             break;
     }
-    Serial.print("STATE: "); Serial.println(agvStatus.currentAGVState);
+    Serial.print(" STATE: "); Serial.println(agvStatus.currentAGVState);
+    Serial.printf(" LOCATION: %d, DESTINATION: %d ", agvStatus.agvLocation, agvStatus.agvDestination);
 }
 
 #endif
+
+// https://www.circuitbasics.com/how-to-read-user-input-from-the-arduino-serial-monitor/ 
+
+/*
+
+future improvements
+1. when the robot reaches the end of the line is should possibly do a u turn and go back, looping forever
+2. using ps4 controller user should be able to tell the AGV to "go home" to destination 0
+3. using ps4 controller user should be able to select destination AGV should go to
+4. emergency stop with ps4 controller
+5. error handling state machine inside of main state machine
+
+void uTurn() {  // ***** in progress
+    // uturn flag true
+    // go forward for half a second to get off cross
+    // turn left until left ir sensor is on line
+    // if left ir sensor is on line keep turning left until both ir sensors are not on line, (robot is on track)
+    // urturn flag false
+}
+
+*/

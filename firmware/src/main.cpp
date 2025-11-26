@@ -40,6 +40,7 @@ void setup() {
 
 void loop() {
   AGVStateMachine();
+  delay(10);
 }
 
 

@@ -115,7 +115,7 @@ void singWarning_2() {
   } noTone(BUZZER_PIN);
 }
 
-void melodyManager(melodies melody) { // function to play melody for every scenario
+void melodyManager(Melodies melody) { // function to play melody for every scenario
   switch (melody) {
     case STARTUP_MELODY:              singAscending(); break;
     case OBJECT_DETECTED_MELODY:      singWarning_2(); break;

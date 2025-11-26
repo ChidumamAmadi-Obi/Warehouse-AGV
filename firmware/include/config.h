@@ -31,7 +31,7 @@ typedef enum { // defines direction codes for motor driver
     FORWARD,
     BACKWARD,
     STOP
-} dir;
+} Dir;
 
 typedef enum { // for agv states
     STATUS_IDLE,                    // waiting for a package, and a destination
@@ -47,7 +47,7 @@ typedef enum { // defines melody codes for melody manager
     DESTINATION_REACHED_MELODY,
     ERROR_MELODY,
     PACKAGE_RECEIVED_MELODY
-} melodies;
+} Melodies;
 
 typedef enum {
     OFF = 0,
@@ -55,14 +55,20 @@ typedef enum {
     MAX_SPEED = 255
 } SpeedModes;
 
+typedef enum {
+ // erros types here
+} Errors;
+
 typedef struct { // for agv status flags and other variables
     bool isOnLine = true;
     bool isDestinationReached = false;
     bool isCarryingLoad = false;
     bool isPathObstructed = false;  
     bool hasBeenAlerted = false;
+    bool hasDestination = false;
     AGVState currentAGVState = STATUS_IDLE;  // keeps track of agv state
     unsigned long lastLineCorrection = 0.0; 
+    int agvDestination = -1; // -1 means no chosen destination 
     int agvLocation = 0; // keeps track of which docking spot the robot is (0-3)
 } AGVStatusFlags;
 
