@@ -9,7 +9,7 @@
 #define AGV
 
 #include "config.h"
-#include "bluetooth_manager.h" // coming soon
+#include "bluetooth_manager.h" 
 #include "indicator.h"
 #include "motor_driver.h"
 #include "sensor_drivers.h"
@@ -25,6 +25,8 @@ void trackLocation(){ // tracks location of agv
 
 void getUserInput(){ // gets user input from ps4 controller ( using serial.parseInt() for simulation and testing )
     int userInputDestination = Serial.parseInt();
+    // int userInputDestination = getPS4ControllerInput();
+
     if (Serial.available() == 0) userInputDestination = -1; // if user has not put anything... 
 
     if ((userInputDestination != agvStatus.agvLocation) && (userInputDestination != -1)) {
@@ -84,7 +86,6 @@ void AGVStateMachine(){
             lineScan(); // check and update robots position on the line
             trackLocation();
 
-            
             if (agvStatus.agvDestination == agvStatus.agvLocation) {
                 agvStatus.currentAGVState = STATUS_UNLOADING;  // if destination has been reached the agv will start unloading
                 agvStatus.hasBeenAlerted = false; // reset alert flag

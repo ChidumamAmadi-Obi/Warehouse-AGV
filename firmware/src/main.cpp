@@ -32,9 +32,10 @@ void initGPIO() {
 void setup() {
   Serial.begin(115200);
   initGPIO();
-  melodyManager(STARTUP_MELODY);
+  // PS4.begin(); // initializes ps4 controller with esp32
   // esp_task_wdt_init(WDT_TIMEOUT, true); //enable panic so ESP32 restarts
   // esp_task_wdt_add(NULL); //add current thread to WDT watch
+  melodyManager(STARTUP_MELODY);
   Serial.println("AGV INITALIZED!");
 }
 
