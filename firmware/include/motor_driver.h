@@ -1,8 +1,9 @@
-#ifndef MOTOR_DRIVER // header gaurds
-#define MOTOR_DRIVER
+#pragma once
 
 #include "config.h"
 
+// controlls noth motor A and B via 4 pins
+// "speed" is controllled via PWM signal
 void L298Driver(Dir direction, SpeedModes speed){ // controls motor direction and speed
     if ( speed != OFF ) { // if given a speed...
         switch(direction) {
@@ -55,5 +56,3 @@ void L298Driver(Dir direction, SpeedModes speed){ // controls motor direction an
         analogWrite(MOTOR_PIN_B2, 0);
     }
 }
-
-#endif

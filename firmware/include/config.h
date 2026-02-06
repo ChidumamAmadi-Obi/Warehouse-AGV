@@ -1,11 +1,15 @@
-#ifndef CONFIG // header gaurds
-#define CONFIG
+//_______________________________________________________________________
+// config.h is where constants and macros are defined
+//_______________________________________________________________________
+
+#pragma once
 
 #include <Arduino.h> // for arduino framework functions
 #include <PS4Controller.h> // for ps4 bluetooth control
 #include <esp_task_wdt.h> // for watchdog timer
 
-#define TRIG_PIN    23 // define pin numbers
+// define pin numbers
+#define TRIG_PIN    23
 #define ECHO_PIN    22
 #define BUZZER_PIN  19
 #define LED_PIN     18
@@ -17,13 +21,17 @@
 #define MOTOR_PIN_B1 32
 #define MOTOR_PIN_B2 33
 
-// define needed constants
+// config macros
 #define SCAN_INTERVAL 200 // (ms) interval at which the ultrasonic distance sensor scans for objects
-#define CORSE_CORRECTION_INTERVAL 100 
+#define CORSE_CORRECTION_INTERVAL 100 // ms
+#define LOCATION_TRACK_INTERVAL 500 // ms
 #define OBSTACLE_DETECTION_THRESHOLD 100 // 100cm
-#define SPEED_OF_SOUND 0.034 // used to calculate distance
-#define REST 50 // music speed
+
+#define REST 50 // ms, music speed
 #define WDT_TIMEOUT 3 // watch dog timer times out after 3 seconds
+
+// dont touch these macros
+#define SPEED_OF_SOUND 0.034 // used to calculate distance
 
 typedef enum { // defines direction codes for motor driver
     RIGHT,
@@ -32,6 +40,16 @@ typedef enum { // defines direction codes for motor driver
     BACKWARD,
     STOP
 } Dir;
+
+typedef enum { // valid ps4 controller inputs that can be processed by the agv
+    INVALID=-1,
+    STATION_HOME,
+    STATION_ONE,
+    STATION_TWO,
+    STATION_THREE,
+    
+    EMERGENCY_STOP,
+} PS4Inputs;
 
 typedef enum { // for agv states
     STATUS_IDLE,                    // waiting for a package, and a destination
@@ -49,39 +67,46 @@ typedef enum { // defines melody codes for melody manager
     PACKAGE_RECEIVED_MELODY
 } Melodies;
 
-typedef enum {
+typedef enum { // set speed modes for robot
     OFF = 0,
     CRUISING_SPEED = 125,
     MAX_SPEED = 255
 } SpeedModes;
 
-typedef enum {
- // erros types here
+typedef enum { // define error states here for future error checking
+    NO_ERROR,
+    PACKAGE_ERROR
 } Errors;
 
+
+// using a struct encapsulates similar data making code more readable
 typedef struct { // for agv status flags and other variables
+    AGVState currentAGVState = STATUS_IDLE;  // keeps track of agv state
+    Errors error = NO_ERROR;
     bool isOnLine = true;
     bool isDestinationReached = false;
     bool isCarryingLoad = false;
     bool isPathObstructed = false;  
     bool hasBeenAlerted = false;
     bool hasDestination = false;
-    AGVState currentAGVState = STATUS_IDLE;  // keeps track of agv state
     unsigned long lastLineCorrection = 0.0; 
-    int agvDestination = -1; // -1 means no chosen destination 
-    int agvLocation = 0; // keeps track of which docking spot the robot is (0-3)
+    uint8_t agvDestination = -1; // -1 means no chosen destination 
+    uint8_t agvLocation = 0; // keeps track of which docking spot the robot is (0-3)
 } AGVStatusFlags;
 
-typedef struct { // using a struct encapsulates similar data making code more readable
+typedef struct { // flags for ir line followin sensors
     bool statusR = false; // on line
     bool statusL = false; // on line
     bool cross = false; // detects if bot is at a cross
 } LineStatusFlags;
 
-LineStatusFlags line;
-AGVStatusFlags agvStatus;
+typedef struct {
+    unsigned long lastDestinationIncriment;
+    unsigned long lastDistanceSensorScan;
+    unsigned long prevLEDMillis; 
+} Timing;
 
-#endif
+Timing timing; // initialize timing struct in config so all files can access it
 
 // refs & explanations
 // https://www.w3schools.com/c/c_enums.php 

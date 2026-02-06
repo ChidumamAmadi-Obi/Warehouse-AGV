@@ -1,11 +1,9 @@
-#ifndef INDICATOR // header gaurds
-#define INDICATOR
+#pragma once 
 
 #include "config.h"
 
-static unsigned long prevLEDMillis;
-
 // melodies for buzzer
+// uses tone() to play different notes and tones on the piezo buzzer
 void singNokiaEntertainer() {
   tone(BUZZER_PIN, 262, 62); // C4
   delay(REST);
@@ -92,7 +90,7 @@ void singDescending() {
   tone(BUZZER_PIN, 262, 200); // C4
   delay(REST*2);
 }
-void singWarning_1() {
+void singWarning1() {
   for (int i = 0; i < 2; i++) { // melody twice
     for (int freq = 600; freq <= 1200; freq += 10) { // Sweep up
       tone(BUZZER_PIN, freq);
@@ -104,7 +102,7 @@ void singWarning_1() {
     }
   } noTone(BUZZER_PIN);
 }
-void singWarning_2() {
+void singWarning2() {
   for (int freq = 1000; freq <= 2000; freq += 10){ // Sweep up
     tone(BUZZER_PIN, freq);
     delay(5);
@@ -118,35 +116,33 @@ void singWarning_2() {
 void melodyManager(Melodies melody) { // function to play melody for every scenario
   switch (melody) {
     case STARTUP_MELODY:              singAscending(); break;
-    case OBJECT_DETECTED_MELODY:      singWarning_2(); break;
+    case OBJECT_DETECTED_MELODY:      singWarning2(); break;
     case DESTINATION_REACHED_MELODY:  singNokiaIntro(); break;
-    case ERROR_MELODY:                singWarning_1(); break;
+    case ERROR_MELODY:                singWarning1(); break;
     case PACKAGE_RECEIVED_MELODY:     singDescending(); break;
-    default:                          singWarning_1(); break;
+    default:                          singWarning1(); break;
     }
   noTone(BUZZER_PIN); // so buzzer does not go forever accidently
 }
 
-void LEDBlinker(int durationOff, int durationOn) {
+void LEDBlinker(unsigned long durationOff, unsigned long durationOn) { // controls blinking of LED precisely without blocking other functions
   static bool LEDState = LOW;
   unsigned long currentMillis = millis();
 
   if (LEDState == HIGH) {
-    if (currentMillis - prevLEDMillis >= durationOff) {
-      prevLEDMillis = currentMillis;
+    if (currentMillis - timing.prevLEDMillis >= durationOff) {
+      timing.prevLEDMillis = currentMillis;
       LEDState = LOW;
       digitalWrite(LED_PIN, LEDState);
     }
   } else {
-    if (currentMillis - prevLEDMillis >= durationOn) {
-      prevLEDMillis = currentMillis;
+    if (currentMillis - timing.prevLEDMillis >= durationOn) {
+      timing.prevLEDMillis = currentMillis;
       LEDState = HIGH;
       digitalWrite(LED_PIN, LEDState);
     }
   }
 }
-
-#endif
 
 // refs & explanations
 // https://codepal.ai/code-generator/query/Zsl4xJci/arduino-code-nokia-intro

@@ -1,11 +1,12 @@
-#ifndef SENSORS // header gaurds
-#define SENSORS
+#pragma once
 
 #include "config.h"
 
-int ultraSonicScan() { // uses the hc-sr04 sensor to scan for obstacles
+static LineStatusFlags line;
+
+uint16_t  ultraSonicScan() { // uses the hc-sr04 sensor to scan for obstacles
     static float duration = 0.0;
-    static int distanceCm = 0;
+    static uint16_t  distanceCm = 0;
 
     digitalWrite(TRIG_PIN,LOW); delay(2);  // start with emitting low pulse
     digitalWrite(TRIG_PIN,HIGH); delay(10);// emit high pulse
@@ -22,8 +23,6 @@ void lineScan(){ // uses ir sensors to keep tracck of where bot is on the line
     line.statusL = digitalRead(L_IR_PIN) ? true : false;                // if condition is true, variable = a, if false variable = b
     line.cross = (line.statusL && line.statusR) ? true : false;    
 } // tenery operators use less lines of code than if else statements
-
-#endif
 
 // refs & explanations
 // https://projecthub.arduino.cc/lucasfernando/ultrasonic-sensor-with-arduino-complete-guide-284faf ultrasonic distance sensors
