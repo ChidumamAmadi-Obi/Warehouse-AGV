@@ -1,6 +1,10 @@
-//_______________________________________________________________________
-// config.h is where constants and macros are defined
-//_______________________________________________________________________
+/* CONFIG
+ this is where macros, constants, structs and enums used by all 
+ source/header files are defined
+ needed librarys are also included here
+ macros can be edited here to changes the behaviour of
+ the program
+*/
 
 #pragma once
 

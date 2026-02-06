@@ -1,6 +1,8 @@
-// MAIN PROGRAM
-// author: Chidumam Amadi-Obi
-// student number: B00167937
+/* MAIN PROGRAM
+author: Chidumam Amadi-Obi
+student number: B00167937
+
+*/
 
 #include "agv_controller.h"
 
@@ -50,7 +52,7 @@ void loop() {
   */
 }
 
-/*
-utilize the esp32's other core to control bluetooth input and output
+/* refs
+print to terminal in color https://gist.github.com/RabaDabaDoba/145049536f815903c79944599c6f952a
 */
 

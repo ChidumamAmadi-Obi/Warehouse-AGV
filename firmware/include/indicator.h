@@ -1,3 +1,7 @@
+/* INDICATIORS
+indicator leds and the piezo buzzer are controlled here
+*/
+
 #pragma once 
 
 #include "config.h"

@@ -1,8 +1,7 @@
 
-//_____________________________________________________________
-// agv control logic
-// state machine and helper functions are declared here
-//_____________________________________________________________
+/*AGV CONTROL LOGIC
+ state machine and helper functions are declared and defined here
+*/
 
 #pragma once
 
@@ -10,8 +9,7 @@
 #include "config.h"
 #include "bluetooth_manager.h" 
 #include "indicator.h"
-#include "motor_driver.h"
-#include "sensor_drivers.h"
+#include "drivers.h"
 
 static AGVStatusFlags agvStatus;
 
@@ -24,7 +22,7 @@ void trackLocation(){ // tracks location of agv
 
 void getUserInput(){ // gets user input from ps4 controller ( using serial.parseInt() for simulation and testing )
     // uint8_t userInputDestination = Serial.parseInt(); 
-    uint8_t userInputDestination = getPS4ControllerInput();
+    PS4Inputs userInputDestination = getPS4ControllerInput();
 
     // if (Serial.available() == 0) userInputDestination = -1; // if user has not put anything... 
 
@@ -34,7 +32,7 @@ void getUserInput(){ // gets user input from ps4 controller ( using serial.parse
         Serial.print(agvStatus.agvDestination);
         // Serial.println(" is your destination");
 
-    } else if (userInputDestination == -1) {
+    } else if (userInputDestination == INVALID || userInputDestination > STATION_THREE) { // invalid destination input
         // Serial.println("input a destination...");
         
     } else if (userInputDestination == agvStatus.agvLocation) {
@@ -116,7 +114,7 @@ void AGVStateMachine(){
         case STATUS_UNLOADING: // state 3  _____________________________________________________________________________________________
             L298Driver(STOP,OFF); // stop and wait for user to remove load
             alertOnce(DESTINATION_REACHED_MELODY);
-            agvStatus.agvDestination = -1; // reset chosen destination 
+            agvStatus.agvDestination = INVALID; // reset chosen destination 
             agvStatus.hasDestination = false;
             if (!agvStatus.isCarryingLoad) agvStatus.currentAGVState = STATUS_IDLE; // if load is removed go back to your idle state
             break;
