@@ -19,5 +19,6 @@ An automated guided vehicle that transports loads along predetermined paths. Fea
 <img width="440" height="440" alt="Screenshot 2025-11-28 185253" src="https://github.com/user-attachments/assets/95552462-4bc5-4fca-91a1-b5b7c6f5d008" />
 
 ### Preview of PCB
-<img width="920" height="650" alt="image" src="https://github.com/user-attachments/assets/6ce2ee27-17a8-415b-8ae9-19e13a7de822" />
+<img width="1150" height="732" alt="image" src="https://github.com/user-attachments/assets/1ccf0e02-bf7a-45ec-bdc3-15ff384be2cb" />
+
 
