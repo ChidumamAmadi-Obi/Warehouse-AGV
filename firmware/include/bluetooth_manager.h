@@ -12,7 +12,7 @@
 // Note: the ps4 controller must be linked to the esp32's MAC address to work
 
 PS4Inputs getPS4ControllerInput(){ // gets user input and turns it into a usable interger number
-    PS4Inputs ps4Input = INVALID;
+    PS4Inputs ps4Input = STATION_NONE;
     if (PS4.isConnected()) {
         if (PS4.Square()) ps4Input = STATION_HOME;
         else if (PS4.Cross()) ps4Input = STATION_ONE;

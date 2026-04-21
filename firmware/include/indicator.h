@@ -118,6 +118,7 @@ void singWarning2() {
 }
 
 void melodyManager(Melodies melody) { // function to play melody for every scenario
+  if (MUTE) return; // return and dont play music
   switch (melody) {
     case STARTUP_MELODY:              singAscending(); break;
     case OBJECT_DETECTED_MELODY:      singWarning2(); break;

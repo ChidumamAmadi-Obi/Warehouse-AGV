@@ -10,7 +10,6 @@
 
 #include <Arduino.h> // for arduino framework functions
 #include <PS4Controller.h> // for ps4 bluetooth control
-#include <esp_task_wdt.h> // for watchdog timer
 
 // define pin numbers
 #define TRIG_PIN    23
@@ -18,8 +17,8 @@
 #define BUZZER_PIN  19
 #define LED_PIN     18
 #define BB_PIN      21
-#define L_IR_PIN    4
-#define R_IR_PIN    16
+#define L_IR_PIN    16
+#define R_IR_PIN    4
 #define MOTOR_PIN_A1 25
 #define MOTOR_PIN_A2 26
 #define MOTOR_PIN_B1 32
@@ -27,12 +26,13 @@
 
 // config macros
 #define SCAN_INTERVAL 200 // (ms) interval at which the ultrasonic distance sensor scans for objects
-#define CORSE_CORRECTION_INTERVAL 100 // ms
-#define LOCATION_TRACK_INTERVAL 500 // ms
-#define OBSTACLE_DETECTION_THRESHOLD 100 // 100cm
+#define CROSS_TIMER 250 // (ms) 
+#define CORSE_CORRECTION_INTERVAL 80 // (ms)
+#define LOCATION_TRACK_INTERVAL 1000 // (ms)
+#define OBSTACLE_DETECTION_THRESHOLD 10 // 10cm
+#define MUTE 1 // set as 1 if you dont want the buzzer to play music at all
 
 #define REST 50 // ms, music speed
-#define WDT_TIMEOUT 3 // watch dog timer times out after 3 seconds
 
 // dont touch these macros
 #define SPEED_OF_SOUND 0.034 // used to calculate distance
@@ -46,7 +46,7 @@ typedef enum { // defines direction codes for motor driver
 } Dir;
 
 typedef enum { // valid ps4 controller inputs that can be processed by the agv
-    INVALID=-1,
+    STATION_NONE=-1,
     STATION_HOME,
     STATION_ONE,
     STATION_TWO,
@@ -87,7 +87,7 @@ typedef enum { // define error states here for future error checking
 typedef struct { // for agv status flags and other variables
     AGVState currentAGVState = STATUS_IDLE;  // keeps track of agv state
     Errors error = NO_ERROR;
-    bool isOnLine = true;
+
     bool isDestinationReached = false;
     bool isCarryingLoad = false;
     bool isPathObstructed = false;  
@@ -105,6 +105,7 @@ typedef struct { // flags for ir line followin sensors
 } LineStatusFlags;
 
 typedef struct {
+    unsigned long crossTimer=0;
     unsigned long lastDestinationIncriment;
     unsigned long lastDistanceSensorScan;
     unsigned long prevLEDMillis; 
