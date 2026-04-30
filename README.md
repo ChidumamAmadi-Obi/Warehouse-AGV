@@ -19,4 +19,5 @@ An automated guided vehicle that transports loads along predetermined paths. Fea
 <img width="1172" height="808" alt="image" src="https://github.com/user-attachments/assets/a0ec0011-8499-48c1-8c18-9887b932f3a0" />
 
 ### State Diagram
-<img width="837" height="410" alt="image" src="https://github.com/user-attachments/assets/75227f6a-7d9b-4cba-8e00-dfef79233eb3" />
+<img width="1004" height="480" alt="image" src="https://github.com/user-attachments/assets/cef5681a-b6a9-4a9d-97f4-acea563f77e6" />
+
