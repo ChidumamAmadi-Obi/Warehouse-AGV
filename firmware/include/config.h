@@ -26,11 +26,11 @@
 
 // config macros
 #define SCAN_INTERVAL 200 // (ms) interval at which the ultrasonic distance sensor scans for objects
-#define CROSS_TIMER 250 // (ms) 
+#define CROSS_TIMER 225 // (ms) 
 #define CORSE_CORRECTION_INTERVAL 80 // (ms)
 #define LOCATION_TRACK_INTERVAL 1000 // (ms)
 #define OBSTACLE_DETECTION_THRESHOLD 10 // 10cm
-#define MUTE 1 // set as 1 if you dont want the buzzer to play music at all
+#define IS_MUTED 0 // set as 1 if you dont want the buzzer to play music at all
 
 #define REST 50 // ms, music speed
 
@@ -68,7 +68,9 @@ typedef enum { // defines melody codes for melody manager
     OBJECT_DETECTED_MELODY,
     DESTINATION_REACHED_MELODY,
     ERROR_MELODY,
-    PACKAGE_RECEIVED_MELODY
+    PACKAGE_RECEIVED_MELODY,
+    SLOW_BEEP,
+    FAST_BEEP,
 } Melodies;
 
 typedef enum { // set speed modes for robot

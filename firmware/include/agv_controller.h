@@ -22,6 +22,12 @@
 
 static AGVStatusFlags agvStatus;
 
+void alertOnce(Melodies melody) { // only alerts user with melody once per state
+    if (!agvStatus.hasBeenAlerted) {
+        melodyManager(melody);
+        agvStatus.hasBeenAlerted = true;
+    }
+}
 void trackLocation(){ // tracks location of agv 
     if (line.cross && (millis() - timing.lastDestinationIncriment > LOCATION_TRACK_INTERVAL)) { // if docking station is reached...
         agvStatus.agvLocation++; // location is updated
@@ -40,19 +46,16 @@ void getUserInput(){ // gets user input from ps4 controller ( using serial.parse
         Serial.print(agvStatus.agvDestination);
         // Serial.println(" is your destination");
 
-    } else if (userInputDestination == STATION_NONE || userInputDestination > STATION_THREE) { // invalid destination input
+    } else if (userInputDestination == STATION_NONE ||  // if input is not valid
+               userInputDestination > STATION_THREE || // ,input is greater than 3
+               userInputDestination == agvStatus.agvLocation || // ,input is already where the robot is located
+               userInputDestination < agvStatus.agvLocation) { // , input location has already been passed
+        alertOnce(FAST_BEEP);
         // Serial.println("input a destination...");
         
-    } else if (userInputDestination == agvStatus.agvLocation) {
-        // Serial.println("AGV is already at location, try again");
-    }
+    } 
 }
-void alertOnce(Melodies melody) { // only alerts user with melody once per state
-    if (!agvStatus.hasBeenAlerted) {
-        melodyManager(melody);
-        agvStatus.hasBeenAlerted = true;
-    }
-}
+
 void lineFollowingAlgo(){ // line following algorithm
     // these line following sensors send a high signal if the color is white and a low signal if the color is black
     lineScan(); // check and update robots position on the line
@@ -93,7 +96,6 @@ void AGVStateMachine(){
                 }
 
                 agvStatus.currentAGVState = STATUS_TRAVELLING; // agv will start traveling
-                alertOnce(PACKAGE_RECEIVED_MELODY);
                 digitalWrite(LED_PIN,LOW); // reset leds
             }
             break;
@@ -127,7 +129,6 @@ void AGVStateMachine(){
             break;
 
         case STATUS_UNLOADING: // state 3  _____________________________________________________________________________________________
-            alertOnce(DESTINATION_REACHED_MELODY);
             L298Driver(STOP,OFF); // stop and wait for user to remove load
 
             agvStatus.isCarryingLoad = digitalRead(BB_PIN);

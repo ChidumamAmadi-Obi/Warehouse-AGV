@@ -59,7 +59,6 @@ void L298Driver(Dir direction, SpeedModes speed){ // controls motor direction an
     }
 }
 void lineScan(){ // uses ir sensors to keep tracck of where bot is on the line
-
     static bool startCrossTimer = false;
     // sensors go HIGH when a lighter color is detected, and LOW when a darker color is detected
     line.statusR = digitalRead(R_IR_PIN) ? false : true;                // variable = (condition) ? a : b
@@ -82,7 +81,7 @@ void lineScan(){ // uses ir sensors to keep tracck of where bot is on the line
         line.cross=false;
     }
 
-   // Serial.print("LEFT"); Serial.print(line.statusL); Serial.print("RIGHT"); Serial.println(line.statusR);
+   Serial.print("LEFT"); Serial.print(line.statusL); Serial.print("RIGHT"); Serial.println(line.statusR);
 } // tenery operators use less lines of code than if else statements
 
 uint16_t  ultraSonicScan() { // uses the hc-sr04 sensor to scan for obstacles

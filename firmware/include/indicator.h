@@ -118,14 +118,17 @@ void singWarning2() {
 }
 
 void melodyManager(Melodies melody) { // function to play melody for every scenario
-  if (MUTE) return; // return and dont play music
+  if (IS_MUTED) return; // return and dont play music
   switch (melody) {
     case STARTUP_MELODY:              singAscending(); break;
     case OBJECT_DETECTED_MELODY:      singWarning2(); break;
     case DESTINATION_REACHED_MELODY:  singNokiaIntro(); break;
     case ERROR_MELODY:                singWarning1(); break;
     case PACKAGE_RECEIVED_MELODY:     singDescending(); break;
+    case FAST_BEEP:                   tone(BUZZER_PIN, 450, 250); delay (250); break;
+    case SLOW_BEEP:                   tone(BUZZER_PIN, 250, 150); delay(250); break;
     default:                          singWarning1(); break;
+
     }
   noTone(BUZZER_PIN); // so buzzer does not go forever accidently
 }

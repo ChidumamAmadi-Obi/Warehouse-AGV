@@ -3,7 +3,6 @@ author: Chidumam Amadi-Obi
 student number: B00167937
 
 NOTES:
-
 after removing unnessesary code, the robot followed the line almot perfectly, it is going off track at specific points so that is easily fixable
 
 to detect the cross / docking station, the robot times how long it is detecting a cross (both line sensors are low as no light is reflected)
@@ -52,13 +51,12 @@ void calliIRSensors(){ // callibrate ir line following sensors and test line fol
 
 // ***************************************************************
 
-
 void setup() {
   Serial.begin(115200);
   initGPIO();
   PS4.begin(); // initializes ps4 controller with esp32
   if (!PS4.isConnected()) Serial.println("ERROR CONNECTING PS4 CONTROLLER, CONTINUING WITHOUT BLUETOOTH...");
-  // melodyManager(ERROR_MELODY);
+  melodyManager(ERROR_MELODY);
   Serial.println("AGV INITALIZED!");
 
 }
@@ -66,7 +64,6 @@ void setup() {
 void loop() {
   AGVStateMachine(); // state machine is called forever
 
-  //calliIRSensors();
   delay(10);
 }
 
