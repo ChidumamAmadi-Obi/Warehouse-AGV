@@ -8,7 +8,6 @@ An automated guided vehicle that transports loads along predetermined paths. Fea
   * PS4 Bluetooth controller for destination input
   * Line following with obstacle avoidance
   * Real-time location tracking
-  * Robust error handling & edge cases
   * Visual/audio alerts (LEDs & buzzer)
   * 3D printable chassis (STL files included)
 
