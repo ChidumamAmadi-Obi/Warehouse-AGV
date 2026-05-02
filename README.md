@@ -1,7 +1,8 @@
-# Warehouse AGV (3rd Year TUD Project)
+# Warehouse AGV (3rd Year Capstone Project)
 
 An automated guided vehicle that transports loads along predetermined paths. Features line following, obstacle detection, location tracking, and PS4 controller input via Bluetooth. Built with a Finite State Machine (FSM) architecture with LED/buzzer alerts for user feedback.
 
+*Link to [Demo Video](https://github.com/user-attachments/assets/4ddb8e79-1c91-4d6d-a385-816ef9b9aa53)*
 <img width="845" height="429" alt="image" src="https://github.com/user-attachments/assets/c0beffa6-a7b3-4663-b2af-edc8c3e35523" />
 
 ### Features    
